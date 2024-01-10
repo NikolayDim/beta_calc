@@ -1,6 +1,6 @@
 """
 Script Overview:
-This script is a tool for personal and educational use, designed to calculate the Beta risk of a stock portfolio, should not be concidered as financial advice 
+This script is a tool for personal and educational use, designed to calculate the Beta risk of a stock portfolio, should not be concidered as financial advice.
 It compares the portfolio against major market indices or a custom ticker to evaluate volatility.
 Formula used for Beta:
 Beta = Covariance(Stock Returns, Index Returns) / Variance(Index Returns)
@@ -8,6 +8,31 @@ Beta = Covariance(Stock Returns, Index Returns) / Variance(Index Returns)
 
 import yfinance as yf
 import pandas as pd
+from datetime import datetime
+
+def valid_date(date_string):
+    try:
+        datetime.strptime(date_string, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+def get_valid_date(prompt):
+    date_input = input(prompt)
+    while not valid_date(date_input):
+        print("Invalid date format. Please use 'YYYY-MM-DD'.")
+        date_input = input(prompt)
+    return date_input
+
+def get_valid_share(prompt):
+    while True:
+        try:
+            share_input = float(input(prompt))
+            if share_input <= 0:
+                raise ValueError
+            return share_input
+        except ValueError:
+            print("Invalid input. Please enter a number greater than 0.")
 
 
 def get_stock_data(tickers, start_date, end_date):
@@ -84,8 +109,8 @@ def main():
             index_ticker = index_options[index_choice]
 
         print("\nEnter the lookback period for beta calculation in the format 'YYYY-MM-DD'.")
-        start_date = input("Start date (e.g., 1990-01-01): ")
-        end_date = input("End date (e.g., 1990-01-01): ")
+        start_date = get_valid_date("Start date (e.g., 1990-01-01): ")
+        end_date = get_valid_date("End date (e.g., 1990-01-01): ")
 
         n = int(input("\nEnter the number of stocks in your portfolio: "))
         tickers = []
@@ -93,7 +118,7 @@ def main():
 
         for _ in range(n):
             ticker = input("Enter stock ticker: ").upper()
-            share = float(input("Enter number of shares owned: "))
+            share = get_valid_share("Enter number of shares owned (can be fractional, greater than 0): ")
             tickers.append(ticker)
             shares.append(share)
 
