@@ -1,3 +1,11 @@
+"""
+Script Overview:
+This script is a tool for personal and educational use, designed to calculate the Beta risk of a stock portfolio, should not be concidered as financial advice 
+It compares the portfolio against major market indices or a custom ticker to evaluate volatility.
+Formula used for Beta:
+Beta = Covariance(Stock Returns, Index Returns) / Variance(Index Returns)
+"""
+
 import yfinance as yf
 import pandas as pd
 
@@ -76,8 +84,8 @@ def main():
             index_ticker = index_options[index_choice]
 
         print("\nEnter the lookback period for beta calculation in the format 'YYYY-MM-DD'.")
-        start_date = input("Start date (e.g., 2020-01-01): ")
-        end_date = input("End date (e.g., 2021-01-01): ")
+        start_date = input("Start date (e.g., 1990-01-01): ")
+        end_date = input("End date (e.g., 1990-01-01): ")
 
         n = int(input("\nEnter the number of stocks in your portfolio: "))
         tickers = []
@@ -92,7 +100,6 @@ def main():
         weights = calculate_portfolio_weights(tickers, shares)
         portfolio_beta = calculate_portfolio_beta(tickers, weights, start_date, end_date, index_ticker)
 
-        # Display output
         if len(tickers) == 1:
             print(f"\nBeta of {tickers[0]} (compared to {index_ticker}): {portfolio_beta}")
         else:
